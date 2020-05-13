@@ -4,6 +4,7 @@ import com.bokugan.reddittop.datasource.LocalPostDataSource
 import com.bokugan.reddittop.datasource.LocalPostDataSourceProvider
 import com.bokugan.reddittop.datasource.RemotePostDataSource
 import com.bokugan.reddittop.datasource.RemotePostDataSourceProvider
+import com.bokugan.reddittop.room.Post
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -26,9 +27,7 @@ private class PostRepositoryService(
             return localDataSource.posts
         }
 
-    override suspend fun updatePosts(posts: List<Post>) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updatePosts(posts: List<Post>) = localDataSource.updatePosts(posts)
 }
 
 private val PostRepositoryInstance by lazy {

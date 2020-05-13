@@ -1,7 +1,9 @@
-package com.bokugan.reddittop.repository
+package com.bokugan.reddittop.room
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+@Entity
 data class Post(
     @PrimaryKey val id: String,
     val title: String,

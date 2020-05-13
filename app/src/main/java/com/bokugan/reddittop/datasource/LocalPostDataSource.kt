@@ -1,6 +1,8 @@
 package com.bokugan.reddittop.datasource
 
-import com.bokugan.reddittop.repository.Post
+import com.bokugan.reddittop.room.DatabaseProvider
+import com.bokugan.reddittop.room.Post
+import com.bokugan.reddittop.room.PostDao
 import kotlinx.coroutines.flow.Flow
 
 interface LocalPostDataSource {
@@ -8,18 +10,22 @@ interface LocalPostDataSource {
     suspend fun updatePosts(posts: List<Post>)
 }
 
-private class TopLocalPostDataSource : LocalPostDataSource {
+private class TopLocalPostDataSource(private val dao: PostDao) : LocalPostDataSource {
 
     override val posts: Flow<List<Post>>
-        get() = TODO("Not yet implemented")
+        get() = dao.getAll()
 
     override suspend fun updatePosts(posts: List<Post>) {
-        TODO("Not yet implemented")
+        dao.update(posts)
     }
 }
 
-private val TopLocalPostDataSourceInstance by lazy { TopLocalPostDataSource() }
+private val TopLocalPostDataSourceInstance by lazy {
+    TopLocalPostDataSource(
+        DatabaseProvider.provide().postDao()
+    )
+}
 
 object LocalPostDataSourceProvider {
-    fun provide() : LocalPostDataSource = TopLocalPostDataSourceInstance
+    fun provide(): LocalPostDataSource = TopLocalPostDataSourceInstance
 }
