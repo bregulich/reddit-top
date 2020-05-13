@@ -1,22 +1,21 @@
-package com.bokugan.reddittop.retrofit
+package com.bokugan.reddittop.redditapi
 
 import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.GET
 
 interface RedditAPI {
     @GET("top.json")
-    fun top(): Call<ResponseBody>
+    suspend fun top(): ResponseBody
 }
 
-private val RedditAPIService by lazy {
+private val RedditAPIRetrofitInstance by lazy {
     Retrofit.Builder()
         .baseUrl("https://www.reddit.com/")
         .build()
         .create(RedditAPI::class.java)
 }
 
-object RedditAPIServiceProvider {
-    fun provideRedditAPIService(): RedditAPI = RedditAPIService
+object RedditAPIProvider {
+    fun provide(): RedditAPI = RedditAPIRetrofitInstance
 }
