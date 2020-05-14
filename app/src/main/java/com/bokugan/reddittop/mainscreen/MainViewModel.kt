@@ -15,7 +15,7 @@ class MainViewModel(private val repository: PostRepository) : ViewModel() {
         get() {
             viewModelScope.launch { repository.refreshPosts() }
             return repository.posts.toLiveData(
-                pageSize = 10,
+                pageSize = PAGE_SIZE,
                 boundaryCallback = BoundaryCallback()
             )
         }
@@ -37,5 +37,14 @@ class MainViewModel(private val repository: PostRepository) : ViewModel() {
                 repository.fetchBefore()
             }
         }
+    }
+
+    fun refreshPosts() =
+        viewModelScope.launch {
+            repository.refreshPosts()
+        }
+
+    companion object {
+        private const val PAGE_SIZE = 10
     }
 }

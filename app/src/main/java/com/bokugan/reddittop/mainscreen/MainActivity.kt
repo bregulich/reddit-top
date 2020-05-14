@@ -20,6 +20,12 @@ class MainActivity : AppCompatActivity() {
 
         recycler_view.adapter = postAdapter
 
-        vm.posts.observe(this, Observer { postAdapter.submitList(it) })
+        refresh_layout.setOnRefreshListener {
+            vm.refreshPosts()
+        }
+
+        vm.posts.observe(this, Observer {
+            postAdapter.submitList(it)
+        })
     }
 }

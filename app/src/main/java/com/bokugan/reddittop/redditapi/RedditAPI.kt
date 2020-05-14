@@ -10,8 +10,12 @@ interface RedditAPI {
     suspend fun top(
         @Query("after") afterId: String? = null,
         @Query("before") beforeId: String? = null,
-        @Query("limit") limit: Int = 10
+        @Query("limit") limit: Int = LIMIT
     ): TopJsonResponse
+
+    companion object {
+        private const val LIMIT = 10
+    }
 }
 
 private val RedditAPIRetrofitInstance by lazy {
