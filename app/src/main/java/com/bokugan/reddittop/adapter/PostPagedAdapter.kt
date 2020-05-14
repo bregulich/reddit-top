@@ -42,6 +42,11 @@ interface OnItemClickListener {
 class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
     private val title: AppCompatTextView = itemView.findViewById(R.id.title)
+    private val author: AppCompatTextView = itemView.findViewById(R.id.author)
+    private val subreddit: AppCompatTextView = itemView.findViewById(R.id.subreddit)
+    private val date: AppCompatTextView = itemView.findViewById(R.id.date)
+    private val score: AppCompatTextView = itemView.findViewById(R.id.score)
+    private val comments: AppCompatTextView = itemView.findViewById(R.id.comments)
     private val thumbnail: AppCompatImageView = itemView.findViewById(R.id.thumbnail)
 
     private var listener: OnItemClickListener? = null
@@ -52,15 +57,22 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.O
     }
 
     fun bindTo(post: Post?, listener: OnItemClickListener?) {
-        val context = title.context
 
         this.post = post
         this.listener = listener
 
-        title.text = post?.title
+        if (post == null) return
+
+        title.text = post.title
+        author.text = post.author
+        subreddit.text = post.subreddit
+        date.text = post.date.toString()
+        score.text = post.score.toString()
+        comments.text = post.comments.toString()
+
         Glide
-            .with(context)
-            .load(post?.thumbnailUrl)
+            .with(thumbnail.context)
+            .load(post.thumbnailUrl)
             .into(thumbnail);
     }
 

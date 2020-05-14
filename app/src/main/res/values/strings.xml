@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Reddit Top</string>
+    <string name="comments">comments</string>
+    <string name="score">Score</string>
 </resources>
