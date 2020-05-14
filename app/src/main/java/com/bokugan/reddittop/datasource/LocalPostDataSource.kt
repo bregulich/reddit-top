@@ -4,6 +4,8 @@ import androidx.paging.DataSource
 import com.bokugan.reddittop.room.DatabaseProvider
 import com.bokugan.reddittop.dataobject.Post
 import com.bokugan.reddittop.room.PostDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 interface LocalPostDataSource {
     val posts: DataSource.Factory<Int, Post>
@@ -15,9 +17,10 @@ private class TopLocalPostDataSource(private val dao: PostDao) : LocalPostDataSo
     override val posts: DataSource.Factory<Int, Post>
         get() = dao.postsByDate()
 
-    override suspend fun updatePosts(posts: List<Post>) {
-        dao.update(posts)
-    }
+    override suspend fun updatePosts(posts: List<Post>) =
+        withContext(Dispatchers.IO) {
+            dao.update(posts)
+        }
 }
 
 private val TopLocalPostDataSourceInstance by lazy {

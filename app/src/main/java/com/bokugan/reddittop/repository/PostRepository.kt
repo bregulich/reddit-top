@@ -3,13 +3,10 @@ package com.bokugan.reddittop.repository
 import androidx.paging.DataSource
 import com.bokugan.reddittop.dataobject.Post
 import com.bokugan.reddittop.datasource.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 interface PostRepository {
-    suspend fun getPosts(): DataSource.Factory<Int, Post>
+    val posts: DataSource.Factory<Int, Post>
+    suspend fun refreshPosts()
 }
 
 private class PostRepositoryService(
@@ -17,21 +14,13 @@ private class PostRepositoryService(
     private val remoteDataSource: RemotePostDataSource
 ) : PostRepository {
 
-    override suspend fun getPosts(): DataSource.Factory<Int, Post> {
-        coroutineScope {
-            launch { updatePosts(remoteDataSource.fetchPosts()) }
-        }
-        return localDataSource.posts
-    }
+    override val posts: DataSource.Factory<Int, Post>
+        get() = localDataSource.posts
 
-    // TODO
-    private suspend fun updatePosts(fetchResult: FetchResult) =
-        withContext(Dispatchers.Default) {
-            if (fetchResult is Success) {
-                localDataSource.updatePosts(fetchResult.posts)
-            } else {
-                TODO()
-            }
+    override suspend fun refreshPosts() =
+        remoteDataSource.fetchPosts().run {
+            if (this is Success) localDataSource.updatePosts(posts)
+            else TODO()
         }
 }
 

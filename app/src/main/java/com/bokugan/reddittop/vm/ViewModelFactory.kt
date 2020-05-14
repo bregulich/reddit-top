@@ -2,6 +2,7 @@ package com.bokugan.reddittop.vm
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.bokugan.reddittop.mainscreen.MainViewModel
 import com.bokugan.reddittop.repository.PostRepositoryProvider
 
 class ViewModelFactory : ViewModelProvider.Factory {
