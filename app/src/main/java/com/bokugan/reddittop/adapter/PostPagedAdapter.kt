@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bokugan.reddittop.R
 import com.bokugan.reddittop.dataobject.Post
 import com.bumptech.glide.Glide
+import kotlin.math.abs
+import kotlin.math.sign
 
 class PostPagedAdapter(private val listener: OnItemClickListener?) :
     PagedListAdapter<Post, PostViewHolder>(DiffCallback) {
@@ -66,9 +68,11 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.O
         title.text = post.title
         author.text = post.author
         subreddit.text = post.subreddit
+
+        // TODO. VM/Couroutine logic. May be performance heavy.
+        score.text = post.score.toShortString()
         date.text = post.date.toString()
-        score.text = post.score.toString()
-        comments.text = post.comments.toString()
+        comments.text = post.comments.toShortString()
 
         Glide
             .with(thumbnail.context)
@@ -79,4 +83,16 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.O
     override fun onClick(v: View?) {
         listener?.onItemClick(post)
     }
+}
+
+// Stackoverflow, yeah...
+private fun Int.toShortString(): String {
+    val num = this
+    val signum = sign(num.toDouble())
+    val absnum = abs(num)
+
+    return if (absnum > 999)
+        String.format("%.1f", (signum * absnum / 1000)) + 'k'
+    else
+        (signum * absnum).toInt().toString()
 }
