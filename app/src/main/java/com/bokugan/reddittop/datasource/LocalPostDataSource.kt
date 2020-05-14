@@ -15,7 +15,7 @@ interface LocalPostDataSource {
 private class TopLocalPostDataSource(private val dao: PostDao) : LocalPostDataSource {
 
     override val posts: DataSource.Factory<Int, Post>
-        get() = dao.postsByDate()
+        get() = dao.getPosts()
 
     override suspend fun updatePosts(posts: List<Post>) =
         withContext(Dispatchers.IO) {

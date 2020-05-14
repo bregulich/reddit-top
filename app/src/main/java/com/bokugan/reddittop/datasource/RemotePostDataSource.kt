@@ -15,17 +15,17 @@ class Error(val errorCode: Type) : FetchResult() {
 }
 
 interface RemotePostDataSource {
-    suspend fun fetchPosts(): FetchResult
+    suspend fun fetchPosts(afterId: String? = null, beforeId: String? = null): FetchResult
 }
 
 private class TopRemotePostDataSource(private val redditAPI: RedditAPI) : RemotePostDataSource {
 
-    override suspend fun fetchPosts(): FetchResult {
+    override suspend fun fetchPosts(afterId: String?, beforeId: String?): FetchResult {
         lateinit var topJson: TopJsonResponse
 
         val error: Error? = withContext(Dispatchers.IO) {
             try {
-                topJson = redditAPI.top()
+                topJson = redditAPI.top(afterId = afterId, beforeId = beforeId)
                 null
             } catch (e: UnknownHostException) {
                 Error(Error.Type.CONNECTION)

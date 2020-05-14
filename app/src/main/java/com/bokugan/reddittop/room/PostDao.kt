@@ -9,8 +9,8 @@ import com.bokugan.reddittop.dataobject.Post
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM post ORDER BY date DESC")
-    fun postsByDate(): DataSource.Factory<Int, Post>
+    @Query("SELECT * FROM post")
+    fun getPosts(): DataSource.Factory<Int, Post>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun update(posts: List<Post>)

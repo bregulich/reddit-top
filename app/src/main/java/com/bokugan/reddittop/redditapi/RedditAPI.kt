@@ -3,10 +3,15 @@ package com.bokugan.reddittop.redditapi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface RedditAPI {
     @GET("top.json")
-    suspend fun top(): TopJsonResponse
+    suspend fun top(
+        @Query("after") afterId: String? = null,
+        @Query("before") beforeId: String? = null,
+        @Query("limit") limit: Int = 10
+    ): TopJsonResponse
 }
 
 private val RedditAPIRetrofitInstance by lazy {

@@ -13,7 +13,29 @@ class MainViewModel(private val repository: PostRepository) : ViewModel() {
 
     val posts: LiveData<PagedList<Post>>
         get() {
-            viewModelScope.launch { repository.refreshPosts() }
-            return repository.posts.toLiveData(10)
+            viewModelScope.launch { repository.fetchPosts() }
+            return repository.posts.toLiveData(
+                pageSize = 10,
+                boundaryCallback = BoundaryCallback()
+            )
         }
+
+    private inner class BoundaryCallback() : PagedList.BoundaryCallback<Post>() {
+
+        override fun onZeroItemsLoaded() {
+            super.onZeroItemsLoaded()
+        }
+
+        override fun onItemAtEndLoaded(itemAtEnd: Post) {
+            viewModelScope.launch {
+                repository.fetchAfter()
+            }
+        }
+
+        override fun onItemAtFrontLoaded(itemAtFront: Post) {
+            viewModelScope.launch {
+                repository.fetchBefore()
+            }
+        }
+    }
 }

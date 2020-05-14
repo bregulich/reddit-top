@@ -13,7 +13,7 @@ import com.bokugan.reddittop.R
 import com.bokugan.reddittop.dataobject.Post
 import com.bumptech.glide.Glide
 
-class PostPagedAdapter : PagedListAdapter<Post, PostViewHolder>(DIFF_CALLBACK) {
+class PostPagedAdapter : PagedListAdapter<Post, PostViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PostViewHolder(
@@ -24,16 +24,14 @@ class PostPagedAdapter : PagedListAdapter<Post, PostViewHolder>(DIFF_CALLBACK) {
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) =
         holder.bindTo(getItem(position))
+}
 
-    companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Post>() {
-            override fun areItemsTheSame(oldItem: Post, newItem: Post) =
-                oldItem.id == newItem.id
+private object DiffCallback : DiffUtil.ItemCallback<Post>() {
+    override fun areItemsTheSame(oldItem: Post, newItem: Post) =
+        oldItem.id == newItem.id
 
-            override fun areContentsTheSame(oldItem: Post, newItem: Post) =
-                oldItem == newItem
-        }
-    }
+    override fun areContentsTheSame(oldItem: Post, newItem: Post) =
+        oldItem == newItem
 }
 
 class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
