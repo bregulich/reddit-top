@@ -30,5 +30,8 @@ data class Post(
     val score: Int,
 
     @SerializedName("num_comments")
-    val comments: Int
+    val comments: Int,
+
+    @SerializedName("permalink")
+    val permalink: String
 )
