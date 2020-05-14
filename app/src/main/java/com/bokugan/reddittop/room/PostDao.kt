@@ -9,9 +9,12 @@ import com.bokugan.reddittop.dataobject.Post
 
 @Dao
 interface PostDao {
-    @Query("SELECT * FROM post")
+    @Query("SELECT * FROM Post")
     fun getPosts(): DataSource.Factory<Int, Post>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun update(posts: List<Post>)
+
+    @Query("DELETE FROM Post")
+    fun deletePosts()
 }

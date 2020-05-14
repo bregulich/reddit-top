@@ -13,7 +13,7 @@ class MainViewModel(private val repository: PostRepository) : ViewModel() {
 
     val posts: LiveData<PagedList<Post>>
         get() {
-            viewModelScope.launch { repository.fetchPosts() }
+            viewModelScope.launch { repository.refreshPosts() }
             return repository.posts.toLiveData(
                 pageSize = 10,
                 boundaryCallback = BoundaryCallback()

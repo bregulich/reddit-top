@@ -6,7 +6,7 @@ import com.bokugan.reddittop.datasource.*
 
 interface PostRepository {
     val posts: DataSource.Factory<Int, Post>
-    suspend fun fetchPosts()
+    suspend fun refreshPosts()
     suspend fun fetchAfter()
     suspend fun fetchBefore()
 }
@@ -23,8 +23,17 @@ private class PostRepositoryService(
     override val posts: DataSource.Factory<Int, Post>
         get() = localDataSource.posts
 
-    override suspend fun fetchPosts() {
-        this.fetchPosts(null, null)
+    override suspend fun refreshPosts() {
+        afterId = null
+        beforeId = null
+
+        val fetchResult = remoteDataSource.fetchPosts()
+        if (fetchResult is Success) {
+            localDataSource.deletePosts()
+            this.fetchPosts(null, null)
+        } else {
+//            TODO("Error handling")
+        }
     }
 
     override suspend fun fetchAfter() {
@@ -45,7 +54,9 @@ private class PostRepositoryService(
             this.afterId = fetchResult.after
             this.beforeId = fetchResult.before
             localDataSource.updatePosts(fetchResult.posts)
-        } else TODO()
+        } else {
+//            TODO("Error handling")
+        }
     }
 }
 

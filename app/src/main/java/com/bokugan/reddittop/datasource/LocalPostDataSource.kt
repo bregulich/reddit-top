@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 interface LocalPostDataSource {
     val posts: DataSource.Factory<Int, Post>
     suspend fun updatePosts(posts: List<Post>)
+    suspend fun deletePosts()
 }
 
 private class TopLocalPostDataSource(private val dao: PostDao) : LocalPostDataSource {
@@ -21,6 +22,12 @@ private class TopLocalPostDataSource(private val dao: PostDao) : LocalPostDataSo
         withContext(Dispatchers.IO) {
             dao.update(posts)
         }
+
+    override suspend fun deletePosts() {
+        withContext(Dispatchers.IO) {
+            dao.deletePosts()
+        }
+    }
 }
 
 private val TopLocalPostDataSourceInstance by lazy {
