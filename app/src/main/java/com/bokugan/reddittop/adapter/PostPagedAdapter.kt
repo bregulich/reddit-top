@@ -3,6 +3,7 @@ package com.bokugan.reddittop.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 
 import androidx.paging.PagedListAdapter
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bokugan.reddittop.R
 import com.bokugan.reddittop.dataobject.Post
+import com.bumptech.glide.Glide
 
 class PostPagedAdapter : PagedListAdapter<Post, PostViewHolder>(DIFF_CALLBACK) {
 
@@ -36,9 +38,16 @@ class PostPagedAdapter : PagedListAdapter<Post, PostViewHolder>(DIFF_CALLBACK) {
 
 class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val text: AppCompatTextView = itemView.findViewById(R.id.text)
+    private val title: AppCompatTextView = itemView.findViewById(R.id.title)
+    private val thumbnail: AppCompatImageView = itemView.findViewById(R.id.thumbnail)
 
     fun bindTo(post: Post?) {
-        text.text = post?.title
+        val context = title.context
+
+        title.text = post?.title
+        Glide
+            .with(context)
+            .load(post?.thumbnailUrl)
+            .into(thumbnail);
     }
 }
