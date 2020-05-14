@@ -8,7 +8,7 @@ import com.bokugan.reddittop.dataobject.Post
 
 private const val DB_NAME = "reddit-posts"
 
-@Database(entities = [Post::class], version = 1)
+@Database(entities = [Post::class], version = 1, exportSchema = false)
 abstract class PostDatabase : RoomDatabase() {
     abstract fun postDao(): PostDao
 }

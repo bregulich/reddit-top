@@ -1,17 +1,15 @@
 package com.bokugan.reddittop.repository
 
-import com.bokugan.reddittop.datasource.LocalPostDataSource
-import com.bokugan.reddittop.datasource.LocalPostDataSourceProvider
-import com.bokugan.reddittop.datasource.RemotePostDataSource
-import com.bokugan.reddittop.datasource.RemotePostDataSourceProvider
+import androidx.paging.DataSource
 import com.bokugan.reddittop.dataobject.Post
+import com.bokugan.reddittop.datasource.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 interface PostRepository {
-    suspend fun fetchPosts(): Flow<List<Post>>
-    suspend fun updatePosts(posts: List<Post>)
+    suspend fun getPosts(): DataSource.Factory<Int, Post>
 }
 
 private class PostRepositoryService(
@@ -19,15 +17,22 @@ private class PostRepositoryService(
     private val remoteDataSource: RemotePostDataSource
 ) : PostRepository {
 
-    override suspend fun fetchPosts(): Flow<List<Post>> {
+    override suspend fun getPosts(): DataSource.Factory<Int, Post> {
         coroutineScope {
-            //launch { updatePosts(remoteDataSource.fetchPosts()) }
+            launch { updatePosts(remoteDataSource.fetchPosts()) }
         }
         return localDataSource.posts
     }
 
-    override suspend fun updatePosts(posts: List<Post>) =
-        localDataSource.updatePosts(posts)
+    // TODO
+    private suspend fun updatePosts(fetchResult: FetchResult) =
+        withContext(Dispatchers.Default) {
+            if (fetchResult is Success) {
+                localDataSource.updatePosts(fetchResult.posts)
+            } else {
+                TODO()
+            }
+        }
 }
 
 private val PostRepositoryInstance by lazy {
