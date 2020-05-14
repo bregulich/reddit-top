@@ -43,7 +43,7 @@
             app:layout_constraintBaseline_toBaselineOf="@id/subreddit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toEndOf="@id/subreddit" />
+            app:layout_constraintStart_toEndOf="@id/subreddit"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/title"
@@ -70,34 +70,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
+            android:text="@string/score"
             app:layout_constraintStart_toStartOf="@id/author"
-            app:layout_constraintTop_toBottomOf="@id/thumbnail"
-            android:text="@string/score"/>
+            app:layout_constraintTop_toBottomOf="@id/thumbnail" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:layout_marginTop="3dp"
-            app:layout_constraintStart_toEndOf="@id/score_label"
+            android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@id/score_label"
-            android:layout_marginStart="3dp"/>
+            app:layout_constraintStart_toEndOf="@id/score_label" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/comments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="3dp"
+            android:textStyle="bold"
             app:layout_constraintBaseline_toBaselineOf="@id/score"
-            app:layout_constraintEnd_toStartOf="@id/comments_label"
-            android:layout_marginEnd="3dp"/>
+            app:layout_constraintEnd_toStartOf="@id/comments_label" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/comments_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/comments"
             app:layout_constraintBaseline_toBaselineOf="@id/score"
-            app:layout_constraintEnd_toEndOf="@id/author"
-            android:text="@string/comments"/>
+            app:layout_constraintEnd_toEndOf="@id/author" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
