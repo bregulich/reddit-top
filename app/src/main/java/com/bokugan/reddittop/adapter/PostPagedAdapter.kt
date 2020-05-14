@@ -1,19 +1,19 @@
 package com.bokugan.reddittop.adapter
 
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
-
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bokugan.reddittop.R
 import com.bokugan.reddittop.dataobject.Post
 import com.bumptech.glide.Glide
-import kotlin.math.abs
-import kotlin.math.sign
+
 
 class PostPagedAdapter(private val listener: OnItemClickListener?) :
     PagedListAdapter<Post, PostViewHolder>(DiffCallback) {
@@ -69,13 +69,15 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.O
         author.text = post.author
         subreddit.text = post.subreddit
 
+        val context = title.context
+
         // TODO. VM/Couroutine logic. May be performance heavy.
         score.text = post.score.toShortString()
-        date.text = post.date.toString()
+        date.text = post.date.toTimeAgo(context)
         comments.text = post.comments.toShortString()
 
         Glide
-            .with(thumbnail.context)
+            .with(context)
             .load(post.thumbnailUrl)
             .into(thumbnail);
     }
@@ -85,14 +87,33 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.O
     }
 }
 
-// Stackoverflow, yeah...
-private fun Int.toShortString(): String {
-    val num = this
-    val signum = sign(num.toDouble())
-    val absnum = abs(num)
-
-    return if (absnum > 999)
-        String.format("%.1f", (signum * absnum / 1000)) + 'k'
+// TODO.
+private fun Int.toShortString() =
+    if (this > 999)
+        String.format("%.1f", (this / 1000f)) + 'k'
     else
-        (signum * absnum).toInt().toString()
+        this.toString()
+
+// TODO.
+private fun Long.toTimeAgo(context: Context): String {
+    // TODO. Utc.
+    val end = System.currentTimeMillis()
+    val delta: Long = end - this
+    val elapsedSeconds = delta / 1000.0
+
+    val resources = context.resources
+
+    val prefix = when {
+        elapsedSeconds < SECOND_MILLIS -> resources.getString(R.string.just_now)
+        elapsedSeconds < MINUTE_MILLIS -> (elapsedSeconds / MINUTE_MILLIS).toInt().toString() + resources.getString(R.string.seconds)
+        elapsedSeconds < HOUR_MILLIS -> (elapsedSeconds / HOUR_MILLIS).toInt().toString() + resources.getString(R.string.minutes)
+        else -> (elapsedSeconds / DAY_MILLIS).toInt().toString() + resources.getString(R.string.hours)
+    }
+
+    return prefix + " " + resources.getString(R.string.ago)
 }
+
+private const val SECOND_MILLIS = 1000;
+private const val MINUTE_MILLIS = 60 * SECOND_MILLIS;
+private const val HOUR_MILLIS = 60 * MINUTE_MILLIS;
+private const val DAY_MILLIS = 24 * HOUR_MILLIS;

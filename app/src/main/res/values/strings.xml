@@ -2,4 +2,10 @@
     <string name="app_name">Reddit Top</string>
     <string name="comments">comments</string>
     <string name="score">Score</string>
+    <string name="ago">ago</string>
+    <string name="just_now">just now</string>
+    <string name="seconds">s</string>
+    <string name="minutes">m</string>
+    <string name="hours">h</string>
+    <string name="days">d</string>
 </resources>
