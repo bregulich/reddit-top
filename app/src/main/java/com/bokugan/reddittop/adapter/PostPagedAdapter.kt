@@ -13,7 +13,8 @@ import com.bokugan.reddittop.R
 import com.bokugan.reddittop.dataobject.Post
 import com.bumptech.glide.Glide
 
-class PostPagedAdapter : PagedListAdapter<Post, PostViewHolder>(DiffCallback) {
+class PostPagedAdapter(private val listener: OnItemClickListener?) :
+    PagedListAdapter<Post, PostViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         PostViewHolder(
@@ -23,7 +24,7 @@ class PostPagedAdapter : PagedListAdapter<Post, PostViewHolder>(DiffCallback) {
         )
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) =
-        holder.bindTo(getItem(position))
+        holder.bindTo(getItem(position), listener)
 }
 
 private object DiffCallback : DiffUtil.ItemCallback<Post>() {
@@ -34,18 +35,36 @@ private object DiffCallback : DiffUtil.ItemCallback<Post>() {
         oldItem == newItem
 }
 
-class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+interface OnItemClickListener {
+    fun onItemClick(post: Post?)
+}
+
+class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
     private val title: AppCompatTextView = itemView.findViewById(R.id.title)
     private val thumbnail: AppCompatImageView = itemView.findViewById(R.id.thumbnail)
 
-    fun bindTo(post: Post?) {
+    private var listener: OnItemClickListener? = null
+    private var post: Post? = null
+
+    init {
+        itemView.setOnClickListener(this)
+    }
+
+    fun bindTo(post: Post?, listener: OnItemClickListener?) {
         val context = title.context
+
+        this.post = post
+        this.listener = listener
 
         title.text = post?.title
         Glide
             .with(context)
             .load(post?.thumbnailUrl)
             .into(thumbnail);
+    }
+
+    override fun onClick(v: View?) {
+        listener?.onItemClick(post)
     }
 }

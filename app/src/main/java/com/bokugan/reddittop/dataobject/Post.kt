@@ -1,5 +1,8 @@
 package com.bokugan.reddittop.dataobject
 
+import android.content.Context
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
@@ -35,3 +38,13 @@ data class Post(
     @SerializedName("permalink")
     val permalink: String
 )
+
+fun Post.openRedditPost(context: Context) {
+    CustomTabsIntent.Builder().build().launchUrl(
+        context,
+        // TODO. VM logic.
+        Uri.parse(REDDIT_HOST + permalink)
+    )
+}
+
+private const val REDDIT_HOST = "https://www.reddit.com"
