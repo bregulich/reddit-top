@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
         refresh_layout.setOnRefreshListener {
             vm.refreshPosts()
+            // TODO. VM LiveData.
+            refresh_layout.isRefreshing = false
         }
 
         vm.posts.observe(this, Observer {
