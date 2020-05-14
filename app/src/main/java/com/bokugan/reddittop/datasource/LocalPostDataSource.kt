@@ -1,7 +1,7 @@
 package com.bokugan.reddittop.datasource
 
 import com.bokugan.reddittop.room.DatabaseProvider
-import com.bokugan.reddittop.room.Post
+import com.bokugan.reddittop.dataobject.Post
 import com.bokugan.reddittop.room.PostDao
 import kotlinx.coroutines.flow.Flow
 

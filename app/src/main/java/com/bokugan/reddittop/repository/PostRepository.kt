@@ -4,7 +4,7 @@ import com.bokugan.reddittop.datasource.LocalPostDataSource
 import com.bokugan.reddittop.datasource.LocalPostDataSourceProvider
 import com.bokugan.reddittop.datasource.RemotePostDataSource
 import com.bokugan.reddittop.datasource.RemotePostDataSourceProvider
-import com.bokugan.reddittop.room.Post
+import com.bokugan.reddittop.dataobject.Post
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ private class PostRepositoryService(
 
     override suspend fun fetchPosts(): Flow<List<Post>> {
         coroutineScope {
-            launch { updatePosts(remoteDataSource.fetchPosts()) }
+            //launch { updatePosts(remoteDataSource.fetchPosts()) }
         }
         return localDataSource.posts
     }

@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.bokugan.reddittop.MyApplication
+import com.bokugan.reddittop.dataobject.Post
 
 private const val DB_NAME = "reddit-posts"
 
